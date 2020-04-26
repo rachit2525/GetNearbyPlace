@@ -34,6 +34,8 @@ public class DownloadUrl {
 
             data = sb.toString();
             br.close();
+            inputStream.close();
+            httpURLConnection.disconnect();
         }
         catch (MalformedURLException e) {
             Log.i("DownloadUrl","readUrl: "+e.getMessage());
@@ -43,10 +45,9 @@ public class DownloadUrl {
         {
             e.printStackTrace();
         }
-        finally {
-            inputStream.close();
-            httpURLConnection.disconnect();
-        }
+//        finally {
+//
+//        }
         return data;
     }
 

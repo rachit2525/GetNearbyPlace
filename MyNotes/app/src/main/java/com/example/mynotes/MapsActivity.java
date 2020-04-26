@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -38,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-GoogleApiClient.OnConnectionFailedListener, LocationListener {
+OnConnectionFailedListener, LocationListener {
 
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
@@ -53,6 +55,8 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        System.out.println("********************************************************************************yahan chal rha1************************************");
+        Intent intent = getIntent();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -62,9 +66,9 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
     }
 
     private void setUPGclient() {
-
+        System.out.println("********************************************************************************yahan chal rha 2************************************");
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,this)
+                .enableAutoManage(this,0,this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
@@ -76,8 +80,8 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
+        System.out.println("********************************************************************************yahan chal rha3************************************");
+         //Add a marker in Sydney and move the camera
 //        LatLng sydney = new LatLng(-34, 151);
 //        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
@@ -89,34 +93,39 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
     }
 
     private void checkPermission() {
+
+        System.out.println("********************************************************************************yahan chal rha 4 permission************************************");
         int permissionLocation = ContextCompat.checkSelfPermission(MapsActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
 
         List<String> listPermission = new ArrayList<>();
-        if(permissionLocation!= PackageManager.PERMISSION_GRANTED) {
+        /*if(permissionLocation!= PackageManager.PERMISSION_GRANTED) {
             listPermission.add(Manifest.permission.ACCESS_FINE_LOCATION);
 
             if (listPermission.isEmpty()) {
                 ActivityCompat.requestPermissions(this,
                         listPermission.toArray(new String[listPermission.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);
             }
-        }
-        else  {
+        }*/
+        //else
+            {
+            System.out.println("********************************************************************************yahan chal rha else l=k ander 5************************************");
                 getMyLocation();
         }
     }
 
-    @Override
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         int permissionLocation=ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION);
 
         if(permissionLocation == PackageManager.PERMISSION_GRANTED) {
+            System.out.println("********************************************************************************yahan chal rha if k ander 6************************************");
             getMyLocation();
         }
         else {
             checkPermission();
         }
-    }
+    }*/
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -130,7 +139,9 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+
         myLocation=location;
+        System.out.println("****************************************Location "+location.toString());
         if(myLocation!=null)
         {
             currentLatitude=location.getLatitude();
@@ -145,6 +156,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
             markerOptions.title("You");
             markerOptions.icon(icon);
             mMap.addMarker(markerOptions);
+            System.out.println("****************************************Marker Added ");
 
             getNearByHospitals();
 
@@ -153,22 +165,26 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private void getNearByHospitals() {
         StringBuilder stringBuilder =
-                new StringBuilder("https://maps.googleapi.com/maps/api/place/nearbysearch/json?");
+                new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");//location=-33.8670522,151.1957362&radius=1500&type=restaurant&keyword=cruise&key=YOUR_API_KEY");
         stringBuilder.append("location="+String.valueOf(currentLatitude)+","+String.valueOf(currentLongitude));
         stringBuilder.append("&radius=1000");
-        stringBuilder.append("&type=hospital");
-        stringBuilder.append("&keys="+getResources().getString(R.string.google_maps_key));
+        stringBuilder.append("&type=store");
+        stringBuilder.append("&key="+getResources().getString(R.string.google_maps_key));
 
         String url=stringBuilder.toString();
         Object dataTransfer[]=new Object[2];
         dataTransfer[0]=mMap;
         dataTransfer[1]=url;
 
+        System.out.println("****************************************String URL= "+url);
+
         GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
         getNearbyPlacesData.execute(dataTransfer);
     }
 
-    private void getMyLocation(){
+    public void getMyLocation(){
+
+        System.out.println("********************************************************************************yahan chal rha my location aarhi 5************************************");
         if(mGoogleApiClient!=null) {
             if (mGoogleApiClient.isConnected()) {
                 int permissionLocation = ContextCompat.checkSelfPermission(MapsActivity.this,

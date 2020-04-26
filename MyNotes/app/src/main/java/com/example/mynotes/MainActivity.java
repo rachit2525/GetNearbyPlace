@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
         ListView listView=findViewById(R.id.listView);
 
+        System.out.println("****************************************this runs");
+
 
 
         HashSet<String> set=(HashSet<String>) sharedPreferences.getStringSet("notes",null);
