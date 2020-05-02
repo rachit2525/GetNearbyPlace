@@ -46,6 +46,7 @@ OnConnectionFailedListener, LocationListener {
     GoogleApiClient mGoogleApiClient;
     double currentLatitude,currentLongitude;
     Location myLocation;
+    String titleSearch;
 
     private final static int REQUEST_CHECK_SETTINGS_GPS =0x1;
     private final static int REQUEST_ID_MULTIPLE_PERMISSIONS=0x2;
@@ -57,6 +58,7 @@ OnConnectionFailedListener, LocationListener {
         setContentView(R.layout.activity_maps);
         System.out.println("********************************************************************************yahan chal rha1************************************");
         Intent intent = getIntent();
+        titleSearch=intent.getExtras().getString("title");
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -167,8 +169,10 @@ OnConnectionFailedListener, LocationListener {
         StringBuilder stringBuilder =
                 new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");//location=-33.8670522,151.1957362&radius=1500&type=restaurant&keyword=cruise&key=YOUR_API_KEY");
         stringBuilder.append("location="+String.valueOf(currentLatitude)+","+String.valueOf(currentLongitude));
-        stringBuilder.append("&radius=1000");
-        stringBuilder.append("&type=store");
+        stringBuilder.append("&radius=3500");
+        stringBuilder.append("&type=");
+        stringBuilder.append(titleSearch);
+
         stringBuilder.append("&key="+getResources().getString(R.string.google_maps_key));
 
         String url=stringBuilder.toString();
@@ -192,8 +196,8 @@ OnConnectionFailedListener, LocationListener {
                 if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
                     myLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                     LocationRequest locationRequest = new LocationRequest();
-                    locationRequest.setInterval(3000);
-                    locationRequest.setFastestInterval(3000);
+//                    locationRequest.setInterval(3000);
+//                    locationRequest.setFastestInterval(3000);
                     locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                     LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                             .addLocationRequest(locationRequest);
