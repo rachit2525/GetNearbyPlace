@@ -49,27 +49,32 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.mynotes.GetNearbyPlacesData.*;
+
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-OnConnectionFailedListener, LocationListener {
+        OnConnectionFailedListener, LocationListener {
 
     private static final String TAG = "MapsActivity";
     //private static MapsActivity instance;
     public GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
-    double currentLatitude,currentLongitude;
+    double currentLatitude, currentLongitude;
     Location myLocation;
     String titleSearch;
 
+    private float GEOFENCE_RADIUS=100;
+
     public GeofencingClient geofencingClient;
-    private int FINE_LOCATION_ACCESS_REQUEST_CODE=10001;
-    private int BACKGROUND_LOCATION_ACCESS_REQUEST_CODE=10002;
+    private int FINE_LOCATION_ACCESS_REQUEST_CODE = 10001;
+    private int BACKGROUND_LOCATION_ACCESS_REQUEST_CODE = 10002;
 
     public GeofenceHelper geofenceHelper;
-    private String GEOFENCE_ID="SOME_GEOFENCE_ID";
+    private String GEOFENCE_ID = "SOME_GEOFENCE_ID";
 
 
-    private final static int REQUEST_CHECK_SETTINGS_GPS =0x1;
-    private final static int REQUEST_ID_MULTIPLE_PERMISSIONS=0x2;
+    private final static int REQUEST_CHECK_SETTINGS_GPS = 0x1;
+    private final static int REQUEST_ID_MULTIPLE_PERMISSIONS = 0x2;
 
 
     @Override
@@ -78,7 +83,7 @@ OnConnectionFailedListener, LocationListener {
         setContentView(R.layout.activity_maps);
         System.out.println("********************************************************************************yahan chal rha1************************************");
         Intent intent = getIntent();
-        titleSearch=intent.getExtras().getString("title");
+        titleSearch = intent.getExtras().getString("title");
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -94,9 +99,6 @@ OnConnectionFailedListener, LocationListener {
 //    }
 
 
-
-
-
     ////////////////////ye fuction se try kr rha tha mai...
 
 
@@ -108,19 +110,15 @@ OnConnectionFailedListener, LocationListener {
     /// abhi yahan pe adapter se data leke bs hmlog ko geofences add krne honge baaki marker and circle hmlog wahin pe add kr chuke hain
 
 
+    public void addGeofence(LatLng latLng, float radius) {
 
-
-
-
-    public void addGeofence(LatLng latLng,float radius) {
-
-        final Geofence geofence = geofenceHelper.getGeofence(GEOFENCE_ID,latLng,radius,
+        final Geofence geofence = geofenceHelper.getGeofence(GEOFENCE_ID, latLng, radius,
                 Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT);
 
         GeofencingRequest geofencingRequest = geofenceHelper.getGeofencingRequest(geofence);
         PendingIntent pendingIntent = geofenceHelper.getPendingIntent();
 
-        geofencingClient.addGeofences(geofencingRequest,pendingIntent)
+        geofencingClient.addGeofences(geofencingRequest, pendingIntent)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -131,7 +129,7 @@ OnConnectionFailedListener, LocationListener {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         String errorMessage = geofenceHelper.getErrorString(e);
-                        Log.d(TAG, "onFailure: "+errorMessage);
+                        Log.d(TAG, "onFailure: " + errorMessage);
                     }
                 });
     }
@@ -139,26 +137,26 @@ OnConnectionFailedListener, LocationListener {
     private void setUPGclient() {
         System.out.println("********************************************************************************yahan chal rha 2************************************");
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,0,this)
+                .enableAutoManage(this, 0, this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
         mGoogleApiClient.connect();
-        }
+    }
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         System.out.println("********************************************************************************yahan chal rha3************************************");
-         //Add a marker in Sydney and move the camera
+        //Add a marker in Sydney and move the camera
 //        LatLng sydney = new LatLng(-34, 151);
 //        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         LatLng sydney = new LatLng(26.505402279122674, 80.29091734439135);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,16));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
 
         enableUserLocation();
     }
@@ -184,9 +182,9 @@ OnConnectionFailedListener, LocationListener {
             }
         }*/
         //else
-            {
+        {
             System.out.println("********************************************************************************yahan chal rha else l=k ander 5************************************");
-                getMyLocation();
+            getMyLocation();
         }
     }
 
@@ -195,31 +193,29 @@ OnConnectionFailedListener, LocationListener {
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
         } else {
-            if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION)) {
-                ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.ACCESS_COARSE_LOCATION},
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                         FINE_LOCATION_ACCESS_REQUEST_CODE);
             } else {
-                ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.ACCESS_COARSE_LOCATION},
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                         FINE_LOCATION_ACCESS_REQUEST_CODE);
             }
         }
     }
 
 
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode==FINE_LOCATION_ACCESS_REQUEST_CODE) {
-            if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == FINE_LOCATION_ACCESS_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 mMap.setMyLocationEnabled(true);
             } else {
 
             }
         }
 
-        if (requestCode==BACKGROUND_LOCATION_ACCESS_REQUEST_CODE) {
-            if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == BACKGROUND_LOCATION_ACCESS_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "YOU CAN ADD GEOFENCES...", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Background location access is necessary for Geofences to trigger..", Toast.LENGTH_SHORT).show();
@@ -240,19 +236,18 @@ OnConnectionFailedListener, LocationListener {
     @Override
     public void onLocationChanged(Location location) {
 
-        myLocation=location;
-        System.out.println("****************************************Location "+location.toString());
-        if(myLocation!=null)
-        {
-            currentLatitude=location.getLatitude();
-            currentLongitude=location.getLongitude();
+        myLocation = location;
+        System.out.println("****************************************Location " + location.toString());
+        if (myLocation != null) {
+            currentLatitude = location.getLatitude();
+            currentLongitude = location.getLongitude();
 
 
             BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.navigation);
 
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude,currentLongitude),15.0f));
-            MarkerOptions markerOptions=new MarkerOptions();
-            markerOptions.position(new LatLng(currentLatitude,currentLongitude));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude, currentLongitude), 15.0f));
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(new LatLng(currentLatitude, currentLongitude));
             markerOptions.title("You");
             markerOptions.icon(icon);
             mMap.addMarker(markerOptions);
@@ -264,33 +259,41 @@ OnConnectionFailedListener, LocationListener {
     }
 
 
-
     private void getNearByHospitals() {
         StringBuilder stringBuilder =
                 new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");//location=-33.8670522,151.1957362&radius=1500&type=restaurant&keyword=cruise&key=YOUR_API_KEY");
-        stringBuilder.append("location="+String.valueOf(currentLatitude)+","+String.valueOf(currentLongitude));
-        stringBuilder.append("&radius=3500");
+        stringBuilder.append("location=" + String.valueOf(currentLatitude) + "," + String.valueOf(currentLongitude));
+        stringBuilder.append("&radius=1000");
         stringBuilder.append("&type=");
         stringBuilder.append(titleSearch);
 
-        stringBuilder.append("&key="+getResources().getString(R.string.google_maps_key));
+        stringBuilder.append("&key=" + getResources().getString(R.string.google_maps_key));
 
-        String url=stringBuilder.toString();
-        Object dataTransfer[]=new Object[2];
-        dataTransfer[0]=mMap;
-        dataTransfer[1]=url;
+        String url = stringBuilder.toString();
+        Object dataTransfer[] = new Object[2];
+        dataTransfer[0] = mMap;
+        dataTransfer[1] = url;
 
-        System.out.println("****************************************String URL= "+url);
+        System.out.println("****************************************String URL= " + url);
 
         GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
         getNearbyPlacesData.execute(dataTransfer);
+        ArrayList newLatArrayList = GetNearbyPlacesData.getLatArrayList();
+        ArrayList newLongArrayList = GetNearbyPlacesData.getLongArrayList();
+        for (int i = 0; i < newLatArrayList.size(); i++) {
+
+            String latitude=newLatArrayList.get(i).toString();
+            String longitude=newLongArrayList.get(i).toString();
+            LatLng latilong = new LatLng(Double.parseDouble(latitude),Double.parseDouble(longitude));
+            addGeofence(latilong,GEOFENCE_RADIUS);
+        }
     }
 
 
-    public void getMyLocation(){
+    public void getMyLocation() {
 
         System.out.println("********************************************************************************yahan chal rha my location aarhi 5************************************");
-        if(mGoogleApiClient!=null) {
+        if (mGoogleApiClient != null) {
             if (mGoogleApiClient.isConnected()) {
                 int permissionLocation = ContextCompat.checkSelfPermission(MapsActivity.this,
                         Manifest.permission.ACCESS_FINE_LOCATION);

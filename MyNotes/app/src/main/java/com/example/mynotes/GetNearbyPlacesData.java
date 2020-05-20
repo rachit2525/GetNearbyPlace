@@ -11,6 +11,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -32,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GetNearbyPlacesData extends AsyncTask<Object,String,String>{ //ContextWrapper {
 
@@ -47,6 +49,11 @@ public class GetNearbyPlacesData extends AsyncTask<Object,String,String>{ //Cont
     private float GEOFENCE_RADIUS=100;
     private String GEOFENCE_ID="SOME_GEOFENCE_ID";
     private int BACKGROUND_LOCATION_ACCESS_REQUEST_CODE=10002;
+    static ArrayList<String> lat= new ArrayList<String>();
+    static ArrayList<String> lng= new ArrayList<String>();
+
+
+
 
 //    GeofenceHelper geofenceHelper;
 //    MapsActivity mapsActivity=new MapsActivity();
@@ -97,6 +104,10 @@ public class GetNearbyPlacesData extends AsyncTask<Object,String,String>{ //Cont
                 MapsActivity mapsActivity=new MapsActivity();
                 addMarker(latLng);
                 addCircle(latLng,GEOFENCE_RADIUS);
+                lat.add(latitude);
+                lng.add(longitude);
+
+
 //                MapsActivity mapsActivity=new MapsActivity();
 //                mapsActivity.getLOCATION(latLng,GEOFENCE_RADIUS);
 
@@ -150,7 +161,28 @@ public class GetNearbyPlacesData extends AsyncTask<Object,String,String>{ //Cont
         }
     }
 
+    // setting the ArrayList Value
+    public void setLatArrayList ( ArrayList lat )
+    {
+        this.lat = lat;
+    }
 
+    // getting the ArrayList value
+    public static ArrayList getLatArrayList()
+    {
+        return lat;
+    }
+
+    public void setLongArrayList ( ArrayList lng )
+    {
+        this.lng = lng;
+    }
+
+    // getting the ArrayList value
+    public static ArrayList getLongArrayList()
+    {
+        return lng;
+    }
 
     private void addMarker(LatLng latLng) {
         MarkerOptions markerOptions= new MarkerOptions().title(name).position(latLng);
