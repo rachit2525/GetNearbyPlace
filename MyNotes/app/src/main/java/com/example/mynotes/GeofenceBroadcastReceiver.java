@@ -17,12 +17,15 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
     private static final String TAG = "GeofenceBroadcastReceiv";
 
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO: This method is called when the BroadcastReceiver is receiving
-        // an Intent broadcast.
-//        Toast.makeText(context, "Geofence Triggered...", Toast.LENGTH_LONG).show();
-        //NotificationHelper notificationHelper= new NotificationHelper(context);
+        // TODO: This method is called when the BroadcastReceiver is receiving an Intent broadcast.
+
+        System.out.println("*******#############################################################################BroadCast Receiver call to ho rha hai.....;......?????????????????????????????????????");
+
+        //Toast.makeText(context, "Geofence Triggered...", Toast.LENGTH_LONG).show();
+        NotificationHelper notificationHelper= new NotificationHelper(context);
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
         if(geofencingEvent.hasError()) {
@@ -39,15 +42,17 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         switch (transitionType) {
             case Geofence.GEOFENCE_TRANSITION_ENTER:
                 Toast.makeText(context, "U have entered a Geofence", Toast.LENGTH_SHORT).show();
-//                notificationHelper.sendHighPriorityNotification("U have entered a Geofence","",MapsActivity.class);
+                notificationHelper.sendHighPriorityNotification("U have entered a Geofence, Check Your LIST","There is an item in your list that" +
+                        " might be available near you.",MapsActivity.class);
                 break;
             case Geofence.GEOFENCE_TRANSITION_EXIT:
                 Toast.makeText(context, "GEOFENCE_TRANSITION_EXIT", Toast.LENGTH_SHORT).show();
-//                notificationHelper.sendHighPriorityNotification("GEOFENCE_TRANSITION_EXIT","",MapsActivity.class);
+                notificationHelper.sendHighPriorityNotification("GEOFENCE_TRANSITION_EXIT","",MapsActivity.class);
                 break;
             case Geofence.GEOFENCE_TRANSITION_DWELL:
                 Toast.makeText(context, "GEOFENCE_TRANSITION_DWELL", Toast.LENGTH_SHORT).show();
-//                notificationHelper.sendHighPriorityNotification("GEOFENCE_TRANSITION_DWELL","",MapsActivity.class);
+                notificationHelper.sendHighPriorityNotification("GEOFENCE_TRANSITION_DWELL,Check Your LIST","There is an item in your list that" +
+                        " might be available near you.",MapsActivity.class);
                 break;
         }
     }

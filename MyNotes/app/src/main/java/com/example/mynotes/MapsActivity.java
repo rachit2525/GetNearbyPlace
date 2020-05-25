@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.mynotes.GetNearbyPlacesData.*;
+import static java.lang.Math.min;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
@@ -114,7 +115,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         final Geofence geofence = geofenceHelper.getGeofence(GEOFENCE_ID, latLng, radius,
                 Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT);
-
+        System.out.println("*****************************************************************yahan tk aa rha mtlb add geofence call ho rhaaa**************************************");
         GeofencingRequest geofencingRequest = geofenceHelper.getGeofencingRequest(geofence);
         PendingIntent pendingIntent = geofenceHelper.getPendingIntent();
 
@@ -123,6 +124,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "onSuccess: Geofence Added...");
+                        //Toast.makeText(MapsActivity.this, "Geofence added", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -280,7 +282,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         getNearbyPlacesData.execute(dataTransfer);
         ArrayList newLatArrayList = GetNearbyPlacesData.getLatArrayList();
         ArrayList newLongArrayList = GetNearbyPlacesData.getLongArrayList();
-        for (int i = 0; i < newLatArrayList.size(); i++) {
+        for (int i = 0; i < (newLatArrayList.size()); i++) {
 
             String latitude=newLatArrayList.get(i).toString();
             String longitude=newLongArrayList.get(i).toString();

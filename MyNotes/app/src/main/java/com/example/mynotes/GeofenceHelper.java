@@ -42,8 +42,12 @@ public class GeofenceHelper extends ContextWrapper {
     public PendingIntent getPendingIntent() {
         if(pendingIntent!=null)
         {
+            System.out.println("*******#############################################################################  if wala  Pending Intent call to ho rha hai.....;......?????????????????????????????????????");
+
             return  pendingIntent;
         }
+
+        System.out.println("*******#############################################################################   Pending Intent call to ho rha hai.....;......?????????????????????????????????????");
 
         Intent intent=new Intent(this, GeofenceBroadcastReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this,2607,intent, PendingIntent
