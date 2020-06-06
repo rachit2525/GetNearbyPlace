@@ -39,7 +39,7 @@ public class GeofenceHelper extends ContextWrapper {
                 .build();
     }
 
-    public PendingIntent getPendingIntent() {
+    public PendingIntent getPendingIntent(String item) {
         if(pendingIntent!=null)
         {
             System.out.println("*******#############################################################################  if wala  Pending Intent call to ho rha hai.....;......?????????????????????????????????????");
@@ -50,6 +50,7 @@ public class GeofenceHelper extends ContextWrapper {
         System.out.println("*******#############################################################################   Pending Intent call to ho rha hai.....;......?????????????????????????????????????");
 
         Intent intent=new Intent(this, GeofenceBroadcastReceiver.class);
+        intent.putExtra("item",item);
         pendingIntent = PendingIntent.getBroadcast(this,2607,intent, PendingIntent
                 .FLAG_UPDATE_CURRENT);
 

@@ -111,13 +111,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /// abhi yahan pe adapter se data leke bs hmlog ko geofences add krne honge baaki marker and circle hmlog wahin pe add kr chuke hain
 
 
-    public void addGeofence(LatLng latLng, float radius) {
+    public void addGeofence(LatLng latLng, float radius,String item) {
 
         final Geofence geofence = geofenceHelper.getGeofence(GEOFENCE_ID, latLng, radius,
                 Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT);
         System.out.println("*****************************************************************yahan tk aa rha mtlb add geofence call ho rhaaa**************************************");
         GeofencingRequest geofencingRequest = geofenceHelper.getGeofencingRequest(geofence);
-        PendingIntent pendingIntent = geofenceHelper.getPendingIntent();
+        PendingIntent pendingIntent = geofenceHelper.getPendingIntent(titleSearch);
 
         geofencingClient.addGeofences(geofencingRequest, pendingIntent)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -287,7 +287,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String latitude=newLatArrayList.get(i).toString();
             String longitude=newLongArrayList.get(i).toString();
             LatLng latilong = new LatLng(Double.parseDouble(latitude),Double.parseDouble(longitude));
-            addGeofence(latilong,GEOFENCE_RADIUS);
+            addGeofence(latilong,GEOFENCE_RADIUS,titleSearch);
         }
     }
 

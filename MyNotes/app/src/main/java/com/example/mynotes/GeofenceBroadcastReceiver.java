@@ -23,7 +23,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         // TODO: This method is called when the BroadcastReceiver is receiving an Intent broadcast.
 
         System.out.println("*******#############################################################################BroadCast Receiver call to ho rha hai.....;......?????????????????????????????????????");
-
+        String item = intent.getStringExtra("item");
         //Toast.makeText(context, "Geofence Triggered...", Toast.LENGTH_LONG).show();
         NotificationHelper notificationHelper= new NotificationHelper(context);
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
@@ -42,7 +42,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         switch (transitionType) {
             case Geofence.GEOFENCE_TRANSITION_ENTER:
                 Toast.makeText(context, "U have entered a Geofence", Toast.LENGTH_SHORT).show();
-                notificationHelper.sendHighPriorityNotification("U have entered a Geofence, Check Your LIST","There is an item in your list that" +
+                notificationHelper.sendHighPriorityNotification("U have entered a Geofence, Check Your LIST","There is an "+ item+" in your list that" +
                         " might be available near you.",MapsActivity.class);
                 break;
             case Geofence.GEOFENCE_TRANSITION_EXIT:
@@ -51,7 +51,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
                 break;
             case Geofence.GEOFENCE_TRANSITION_DWELL:
                 Toast.makeText(context, "GEOFENCE_TRANSITION_DWELL", Toast.LENGTH_SHORT).show();
-                notificationHelper.sendHighPriorityNotification("GEOFENCE_TRANSITION_DWELL,Check Your LIST","There is an item in your list that" +
+                notificationHelper.sendHighPriorityNotification("GEOFENCE_TRANSITION_DWELL,Check Your LIST","There is an "+ item+" in your list that" +
                         " might be available near you.",MapsActivity.class);
                 break;
         }
