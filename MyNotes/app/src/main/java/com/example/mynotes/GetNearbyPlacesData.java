@@ -68,7 +68,7 @@ public class GetNearbyPlacesData extends AsyncTask<Object,String,String>{ //Cont
         DownloadUrl downloadUrl=new DownloadUrl();
         try  {
             googlePlacesData = downloadUrl.readUrl(url);
-
+            System.out.println("****************************************googlePLacesData = "+googlePlacesData);
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -81,6 +81,7 @@ public class GetNearbyPlacesData extends AsyncTask<Object,String,String>{ //Cont
         try {
             JSONObject parentObject = new JSONObject(s);
             JSONArray resultArray = parentObject.getJSONArray("results");
+            System.out.println("****************************************INSIDE OnPOSTeXECUTE resultArray.size() = " + resultArray.length());
             for(int i=0;i<resultArray.length();i++)
             {
                 JSONObject jsonObject = resultArray.getJSONObject(i);
@@ -106,7 +107,7 @@ public class GetNearbyPlacesData extends AsyncTask<Object,String,String>{ //Cont
                 addCircle(latLng,GEOFENCE_RADIUS);
                 lat.add(latitude);
                 lng.add(longitude);
-
+                System.out.println("****************************************Should add marker and circle");
 
 //                MapsActivity mapsActivity=new MapsActivity();
 //                mapsActivity.getLOCATION(latLng,GEOFENCE_RADIUS);
